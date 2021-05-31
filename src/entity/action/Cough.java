@@ -7,7 +7,7 @@ import entity.MovingEntity;
 import entity.effect.Sick;
 import game.Game;
 import game.GameLoop;
-import game.state.State;
+import state.State;
 
 public class Cough extends Action {
 
@@ -33,7 +33,7 @@ public class Cough extends Action {
 
             state.getGameObjectsOfClass(MovingEntity.class).stream()
                     .filter(movingEntity -> movingEntity.getCollisionBox().collidesWith(spreadArea))
-                    .filter(movingEntity -> movingEntity.isAffectedBy(Sick.class))
+                    .filter(movingEntity -> !movingEntity.isAffectedBy(Sick.class))
                     .forEach(movingEntity -> {
                         if(Math.random() < riskOfInfection){
                             movingEntity.addEffect(new Sick());

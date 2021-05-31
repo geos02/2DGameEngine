@@ -5,9 +5,9 @@ import controller.EntityController;
 import core.*;
 import entity.action.Action;
 import entity.effect.Effect;
-import game.state.State;
 import gfx.AnimationManager;
 import gfx.SpriteLibrary;
+import state.State;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -36,6 +36,8 @@ public abstract class MovingEntity extends GameObject {
         this.effects = new ArrayList<>();
         this.collisionBoxSize = new Size(16,28);
         this.action = Optional.empty();
+        this.renderOffset = new Position(size.getWidth() / 2, size.getHeight() - 12);
+        this.collisionBoxOffset = new Position(collisionBoxSize.getWidth() / 2, collisionBoxSize.getHeight());
     }
 
     @Override
@@ -103,14 +105,11 @@ public abstract class MovingEntity extends GameObject {
     }
 
     @Override
-    public boolean collidesWith(GameObject other) {
-        return getCollisionBox().collidesWith(other.getCollisionBox());
-    }
-
-    @Override
     public CollisionBox getCollisionBox() {
-        Position positionWithMotion = Position.copyOf(position);
+        Position positionWithMotion = Position.copyOf(getPosition());
         positionWithMotion.apply(motion);
+        positionWithMotion.subtract(collisionBoxOffset);
+        
         return new CollisionBox(new Rectangle(
                 positionWithMotion.intX(),
                 positionWithMotion.intY(),
@@ -153,6 +152,7 @@ public abstract class MovingEntity extends GameObject {
         CollisionBox otherBox = other.getCollisionBox();
         Position positionWithXApplied = Position.copyOf(position);
         positionWithXApplied.applyX(motion);
+        positionWithXApplied.subtract(collisionBoxOffset);
 
         return CollisionBox.of(positionWithXApplied, collisionBoxSize).collidesWith(otherBox);
     }
@@ -161,6 +161,7 @@ public abstract class MovingEntity extends GameObject {
         CollisionBox otherBox = other.getCollisionBox();
         Position positionWithYApplied = Position.copyOf(position);
         positionWithYApplied.applyY(motion);
+        positionWithYApplied.subtract(collisionBoxOffset);
 
         return CollisionBox.of(positionWithYApplied, collisionBoxSize).collidesWith(otherBox);
     }

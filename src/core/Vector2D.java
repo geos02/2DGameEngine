@@ -24,6 +24,10 @@ public class Vector2D {
         x *= speed;
         y *= speed;
     }
+    
+    public static Vector2D copyOf(Vector2D vector) {
+    	return new Vector2D(vector.getX(),vector.getY());
+    }
 
     public double getX() {
         return x;

@@ -5,10 +5,9 @@ import core.Size;
 import display.Display;
 
 import game.settings.GameSettings;
-import game.state.GameState;
-import game.state.State;
-
 import input.Input;
+import state.State;
+import state.game.GameState;
 
 public class Game {
 

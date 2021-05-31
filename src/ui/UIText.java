@@ -1,8 +1,8 @@
 package ui;
 
 import core.Size;
-import game.state.State;
 import gfx.ImageUtils;
+import state.State;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

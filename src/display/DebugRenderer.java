@@ -2,7 +2,7 @@ package display;
 
 import core.CollisionBox;
 import game.GameLoop;
-import game.state.State;
+import state.State;
 
 import java.awt.*;
 

@@ -1,4 +1,4 @@
-package game.state;
+package state;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -45,11 +45,23 @@ public abstract class State {
 		gameObjects.forEach(gameObject -> gameObject.update(this));
 		uiContainers.forEach(uiContainer -> uiContainer.update(this));
 		camera.update(this);
+		handleMouseInput();
+	}
+	
+	private void handleMouseInput() {
+		
+		if(input.isMouseClicked())
+			System.out.println(String.format("MOUSE CLICKED AT POSITION x:%d y:%d", 
+											 input.getMousePosition().intX(),
+											 input.getMousePosition().intY()));
+		
+		input.clearMouseClicked();
 	}
 	
 	private void sortObjectsByPosition() {
 		
-		gameObjects.sort(Comparator.comparing( gameObject -> gameObject.getPosition().getY() ));
+		gameObjects.sort(Comparator.comparing(GameObject::getRenderOrder)
+						 .thenComparing( gameObject -> gameObject.getPosition().getY() ));
 	}
 	
 	public List<GameObject> getGameObjects(){
@@ -86,4 +98,8 @@ public abstract class State {
 				.map(gameObject -> (T) gameObject)
 				.collect(Collectors.toList());
 	}
+    
+    public Input getInput() {
+    	return input;
+    }
 }

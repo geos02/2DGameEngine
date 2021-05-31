@@ -1,9 +1,9 @@
-package game.ui;
+package state.game.ui;
 
 import core.Size;
 import entity.MovingEntity;
 import entity.effect.Sick;
-import game.state.State;
+import state.State;
 import ui.*;
 
 public class UISicknessStatistics extends HorizontalContainer {

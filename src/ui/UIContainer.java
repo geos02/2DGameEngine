@@ -2,8 +2,8 @@ package ui;
 
 import core.Position;
 import core.Size;
-import game.state.State;
 import gfx.ImageUtils;
+import state.State;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -16,7 +16,8 @@ public abstract class UIContainer extends UIComponent {
 
     protected Alignment alignment;
     protected Size windowSize;
-
+    protected Size fixedSize;
+    
     protected List<UIComponent> children;
 
 
@@ -37,7 +38,9 @@ public abstract class UIContainer extends UIComponent {
 
     private void calculateSize(){
         Size contentSize = calculateContentSize();
-        size = new Size(
+        size = fixedSize != null
+        		? fixedSize
+        		: new Size(
                 padding.getHorizontal() + contentSize.getWidth(),
                 padding.getVertical() + contentSize.getHeight()
         );
@@ -61,8 +64,8 @@ public abstract class UIContainer extends UIComponent {
             y = windowSize.getHeight() - size.getHeight() - margin.getBottom();
         }
 
-        position = new Position(x,y);
-
+        this.relativePosition = new Position(x,y);
+        this.absolutePosition = new Position(x,y);
         calculateContentPosition();
     }
 
@@ -77,8 +80,8 @@ public abstract class UIContainer extends UIComponent {
         for(UIComponent uiComponent : children){
             graphics2.drawImage(
                     uiComponent.getSprite(),
-                    uiComponent.getPosition().intX(),
-                    uiComponent.getPosition().intY(),
+                    uiComponent.getRelativePosition().intX(),
+                    uiComponent.getRelativePosition().intY(),
                     null
             );
         }
@@ -100,5 +103,13 @@ public abstract class UIContainer extends UIComponent {
 
     public void setBackgroundColor(Color color) {
         backgroundColor = color;
+    }
+    
+    public void setAlignment(Alignment alignment) {
+    	this.alignment = alignment;
+    }
+    
+    public void setFixedSize(Size size) {
+    	this.fixedSize = size;
     }
 }

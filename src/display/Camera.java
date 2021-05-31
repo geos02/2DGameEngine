@@ -7,8 +7,8 @@ import core.Position;
 import core.Size;
 import entity.GameObject;
 import game.Game;
-import game.state.State;
 import map.GameMap;
+import state.State;
 
 public class Camera {
 

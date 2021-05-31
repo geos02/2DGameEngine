@@ -7,8 +7,8 @@ import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
-import game.state.State;
 import input.Input;
+import state.State;
 
 public class Display extends JFrame {
 
@@ -28,6 +28,8 @@ public class Display extends JFrame {
 		canvas = new Canvas();
 		canvas.setPreferredSize(new Dimension(width, height));
 		canvas.setFocusable(false);
+		canvas.addMouseListener(input);
+		canvas.addMouseMotionListener(input);
 		
 		
 		add(canvas);
