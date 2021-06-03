@@ -5,11 +5,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import audio.AudioPlayer;
 import core.Position;
 import core.Size;
 import display.Camera;
 import entity.GameObject;
-
+import game.Game;
 import game.Time;
 import gfx.SpriteLibrary;
 import input.Input;
@@ -23,12 +24,16 @@ public abstract class State {
 	protected Input input;
 	protected Camera camera;
 	protected Time time;
-
+	protected AudioPlayer audioPlayer;
+	
 	protected List<GameObject> gameObjects;
 	protected List<UIContainer> uiContainers;
+
+	private State nextState;
 	
 	public State(Size windowSize, Input input) {
-		time = new Time();
+		this.audioPlayer = new AudioPlayer();
+		this.time = new Time();
 		this.input = input;
 
 		gameObjects = new ArrayList<>();
@@ -36,16 +41,22 @@ public abstract class State {
 		spriteLibrary = new SpriteLibrary();
 
 		camera = new Camera(windowSize);
+		
+		
 
 	}
 	
-	public void update() {
+	public void update(Game game) {
 		time.update();
 		sortObjectsByPosition();
 		gameObjects.forEach(gameObject -> gameObject.update(this));
-		uiContainers.forEach(uiContainer -> uiContainer.update(this));
+		List.copyOf(uiContainers).forEach(uiContainer -> uiContainer.update(this));
 		camera.update(this);
 		handleMouseInput();
+		
+		if(nextState != null) {
+			game.enterState(nextState);
+		}
 	}
 	
 	private void handleMouseInput() {
@@ -102,4 +113,10 @@ public abstract class State {
     public Input getInput() {
     	return input;
     }
+
+	public void setNextState(State nextState) {
+		this.nextState = nextState;
+	}
+    
+    
 }

@@ -25,6 +25,7 @@ public class Camera {
 		
 		this.position = new Position(0,0);
 		this.windowSize = size;
+		this.objectWithFocus = Optional.empty();
 		calculateViewBounds();
 	}
 

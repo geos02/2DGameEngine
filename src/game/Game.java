@@ -7,7 +7,7 @@ import display.Display;
 import game.settings.GameSettings;
 import input.Input;
 import state.State;
-import state.game.GameState;
+import state.menu.MenuState;
 
 public class Game {
 
@@ -23,7 +23,7 @@ public class Game {
 	public Game(int width, int height) {
 		input = new Input(this);
 		display = new Display(width, height,input);
-		state = new GameState(new Size(width,height),input);
+		state = new MenuState(new Size(width,height),input);
 		gameController = new GameController(input);
 
 		settings = new GameSettings();
@@ -31,7 +31,7 @@ public class Game {
 
 	
 	public void update() {
-		state.update();
+		state.update(this);
 		gameController.update(this);
 	}
 	
@@ -41,5 +41,11 @@ public class Game {
 
 	public GameSettings getSettings() {
 		return settings;
+	}
+
+
+	public void enterState(State nextState) {
+		
+		state = nextState;
 	}
 }

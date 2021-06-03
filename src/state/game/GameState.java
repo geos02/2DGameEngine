@@ -44,13 +44,13 @@ public class GameState extends State {
 		uiContainers.add(new UIGameTime(windowSize));
 		uiContainers.add(new UISicknessStatistics(windowSize));
 		
-		VerticalContainer verticalContainer = new VerticalContainer(windowSize);
+		/*VerticalContainer verticalContainer = new VerticalContainer(windowSize);
 		verticalContainer.setAlignment(new Alignment(Alignment.Position.CENTER,Alignment.Position.CENTER));
 		verticalContainer.setBackgroundColor(Color.DARK_GRAY);
-		verticalContainer.addUIComponent(new UIButton("Menu", () -> System.out.println("Button1 pressed")));
-		verticalContainer.addUIComponent(new UIButton("Options", () -> System.out.println("Button2 pressed")));
-		verticalContainer.addUIComponent(new UIButton("Exit", () -> System.exit(0)));
-		uiContainers.add(verticalContainer);
+		verticalContainer.addUIComponent(new UIButton("Menu", (state) -> System.out.println("Button1 pressed")));
+		verticalContainer.addUIComponent(new UIButton("Options", (state) -> System.out.println("Button2 pressed")));
+		verticalContainer.addUIComponent(new UIButton("Exit", (state) -> System.exit(0)));
+		uiContainers.add(verticalContainer);*/
 		
 	}
 
