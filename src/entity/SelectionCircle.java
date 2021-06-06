@@ -37,7 +37,7 @@ public class SelectionCircle extends GameObject {
 
     @Override
     public Image getSprite() {
-        return sprite;
+        return (parent != null) ? sprite : null;
     }
 
     @Override

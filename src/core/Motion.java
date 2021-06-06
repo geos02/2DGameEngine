@@ -49,4 +49,10 @@ public class Motion {
                 stopX ? 0 : vector2D.getX(),
                 stopY ? 0 : vector2D.getY());
     }
+
+	public Vector2D getDirection() {
+		Vector2D direction = Vector2D.copyOf(vector2D);
+		direction.normalize();
+		return direction;
+	}
 }

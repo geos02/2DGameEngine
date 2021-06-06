@@ -16,7 +16,7 @@ public class MenuState extends State {
 		uiContainers.add(new UIMainMenu(windowSize));
 		
 		// Play Music
-		audioPlayer.playMusic("isobubbler.wav");
+		//audioPlayer.playMusic("isobubbler.wav");
 	}
 
 	public void enterMenu(UIContainer container) {
