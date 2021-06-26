@@ -9,9 +9,11 @@ import audio.AudioPlayer;
 import core.Position;
 import core.Size;
 import display.Camera;
+import entity.Bubble;
 import entity.GameObject;
 import game.Game;
 import game.Time;
+import game.settings.GameSettings;
 import gfx.SpriteLibrary;
 import input.Input;
 import map.GameMap;
@@ -25,17 +27,20 @@ public abstract class State {
 	protected Camera camera;
 	protected Time time;
 	protected AudioPlayer audioPlayer;
+	protected GameSettings settings;
 	
 	protected List<GameObject> gameObjects;
 	protected List<UIContainer> uiContainers;
 
 	private State nextState;
 	
-	public State(Size windowSize, Input input) {
+	public State(Size windowSize, Input input,  GameSettings settings) {
 		this.audioPlayer = new AudioPlayer();
 		this.time = new Time();
 		this.input = input;
-
+		this.settings = settings;
+	
+		
 		gameObjects = new ArrayList<>();
 		uiContainers = new ArrayList<>();
 		spriteLibrary = new SpriteLibrary();
@@ -49,7 +54,8 @@ public abstract class State {
 	public void update(Game game) {
 		time.update();
 		sortObjectsByPosition();
-		gameObjects.forEach(gameObject -> gameObject.update(this));
+		updateGameObjects();
+		//gameObjects.forEach(gameObject -> gameObject.update(this));
 		List.copyOf(uiContainers).forEach(uiContainer -> uiContainer.update(this));
 		camera.update(this);
 		handleMouseInput();
@@ -59,12 +65,19 @@ public abstract class State {
 		}
 	}
 	
+	private void updateGameObjects() {
+		
+		for(int i=0; i < gameObjects.size(); i++) {
+			gameObjects.get(i).update(this);
+		}
+	}
+	
 	private void handleMouseInput() {
 		
-		if(input.isMouseClicked())
+		/*if(input.isMouseClicked())
 			System.out.println(String.format("MOUSE CLICKED AT POSITION x:%d y:%d", 
 											 input.getMousePosition().intX(),
-											 input.getMousePosition().intY()));
+											 input.getMousePosition().intY()));*/
 		
 		input.clearMouseClicked();
 	}
@@ -116,6 +129,24 @@ public abstract class State {
 
 	public void setNextState(State nextState) {
 		this.nextState = nextState;
+	}
+
+	public GameSettings getGameSettings() {
+		// TODO Auto-generated method stub
+		return settings;
+	}
+
+	public AudioPlayer getAudioPlayer() {
+		return audioPlayer;
+	}
+
+	public SpriteLibrary getSpriteLibrary() {
+		
+		return spriteLibrary;
+	}
+
+	public void spawn(GameObject gameObject) {
+		gameObjects.add(gameObject);
 	}
     
     

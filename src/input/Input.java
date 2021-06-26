@@ -22,7 +22,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener {
 		pressed = new boolean[255];
 		currentlyPressed = new boolean[255];
 		this.game = game;
-		this.mousePosition = new Position(0, 0);
+		this.mousePosition = new Position(-1, -1);
 	}
 
 	public boolean isPressed(int keyCode){

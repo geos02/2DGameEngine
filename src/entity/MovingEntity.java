@@ -3,16 +3,11 @@ package entity;
 
 import controller.EntityController;
 import core.*;
-import entity.action.Action;
-import entity.effect.Effect;
 import gfx.AnimationManager;
 import gfx.SpriteLibrary;
 import state.State;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 public abstract class MovingEntity extends GameObject {
 
@@ -23,10 +18,9 @@ public abstract class MovingEntity extends GameObject {
     protected Direction direction;
     protected Vector2D directionVector;
 
-    protected List<Effect> effects;
-    protected Optional<Action> action;
+    
 
-    private Size collisionBoxSize;
+    protected Size collisionBoxSize;
 
     public MovingEntity(EntityController entityController, SpriteLibrary spriteLibrary){
         super();
@@ -34,44 +28,26 @@ public abstract class MovingEntity extends GameObject {
         this.motion = new Motion(2);
         this.direction = Direction.S;
         this.directionVector = new Vector2D(0, 0);
-        this.animationManager = new AnimationManager(spriteLibrary.getUnit("matt"));
-        this.effects = new ArrayList<>();
-        this.collisionBoxSize = new Size(16,28);
-        this.action = Optional.empty();
-        this.renderOffset = new Position(size.getWidth() / 2, size.getHeight() - 12);
-        this.collisionBoxOffset = new Position(collisionBoxSize.getWidth() / 2, collisionBoxSize.getHeight());
+        this.animationManager = new AnimationManager(spriteLibrary.getSpriteSet("matt"));
+        this.collisionBoxSize = new Size(size.getWidth(), size.getHeight());
     }
 
     @Override
     public void update(State state) {
-        handleAction(state);
+        motion.update(entityController);
         handleMotion();
 
         animationManager.update(direction);
-        effects.forEach(effect -> effect.update(state,this));
 
         handleCollisions(state);
         manageDirection();
-        decideAnimation();
+        animationManager.playAnimation(decideAnimation());
 
         position.apply(motion);
-
-        cleanUp(); // clean effects
     }
+    
+    protected abstract void handleMotion();
 
-    private void handleMotion() {
-        if(action.isEmpty()){
-            motion.update(entityController);
-        }else {
-            motion.stop(true,true);
-        }
-    }
-
-    private void handleAction(State state){
-        if(action.isPresent()){
-            action.get().update(state,this);
-        }
-    }
 
     private void handleCollisions(State state){
         state.getCollidingGameObjects(this)
@@ -80,25 +56,10 @@ public abstract class MovingEntity extends GameObject {
 
     protected abstract void handleCollisions(GameObject gameObject);
 
-    private void cleanUp() {
-        List.copyOf(effects).stream()
-                .filter(Effect::shouldDelete)
-                .forEach(effects::remove);
 
-        if(action.isPresent() && action.get().isDone()){
-            action = Optional.empty();
-        }
-    }
-
-    private void decideAnimation() {
-        if(action.isPresent())
-            animationManager.playAnimation(action.get().getAnimationName());
-        else if(motion.isMoving())
-            animationManager.playAnimation("walk");
-        else
-            animationManager.playAnimation("stand");
-    }
-
+    protected abstract String decideAnimation();
+    
+   
     private void manageDirection() {
         if(motion.isMoving()){
             this.direction = Direction.fromMotion(motion);
@@ -134,22 +95,7 @@ public abstract class MovingEntity extends GameObject {
         motion.multiply(multiplier);
     }
 
-    public void perform(Action action) {
-        this.action = Optional.of(action);
-    }
-
-    public void addEffect(Effect effect) {
-        effects.add(effect);
-    }
-
-    public boolean isAffectedBy(Class<?> clazz) {
-        return effects.stream()
-                .anyMatch(effect -> clazz.isInstance(effect));
-    }
-
-    protected void clearEffect() {
-        effects.clear();
-    }
+   
 
     public boolean willCollideX(GameObject other){
         CollisionBox otherBox = other.getCollisionBox();

@@ -5,12 +5,14 @@ import java.util.Optional;
 
 import controller.EntityController;
 import core.Position;
+import entity.humanoid.Humanoid;
+import entity.humanoid.action.BlowBubble;
 import game.Game;
 import gfx.SpriteLibrary;
 import state.State;
 
 
-public class Player extends MovingEntity {
+public class Player extends Humanoid {
 	
 	private NPC target;
 	private double targetRange;
@@ -29,6 +31,8 @@ public class Player extends MovingEntity {
 		
 		super.update(state);
 		handleTarget(state);
+		
+		handleInput(state);
 	}
 
 	private void handleTarget(State state) {
@@ -46,6 +50,14 @@ public class Player extends MovingEntity {
 			target = null;
 		}
 	}
+	
+	private void handleInput(State state) {
+		if(entityController.isRequestingAction()) {
+			if(target != null) {
+				perform(new BlowBubble(target));
+			}
+		}
+	}
 
 	private Optional<NPC> findClosestNPC(State state) {
 		
@@ -59,10 +71,7 @@ public class Player extends MovingEntity {
 
 	@Override
 	protected void handleCollisions(GameObject gameObject) {
-		if(gameObject instanceof NPC){
-			NPC other = (NPC) gameObject;
-			other.clearEffect();
-		}
+		
 	}
 
 }

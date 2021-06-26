@@ -48,7 +48,7 @@ public class AudioPlayer {
 	private Clip getClip(String fileName) {
 		// URL file:/E:/Java/Java%202D%20Game/MyGame/res/sounds/isobubbler.wav
 		final URL soundFile = AudioPlayer.class.getResource("/sounds/" + fileName);
-		System.out.println(soundFile.toString());
+		//System.out.println(soundFile.toString());
 		try(AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile)){
 			final Clip clip = AudioSystem.getClip();
 			clip.open(audioInputStream);

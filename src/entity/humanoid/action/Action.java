@@ -1,11 +1,11 @@
-package entity.action;
+package entity.humanoid.action;
 
-import entity.MovingEntity;
+import entity.humanoid.*;
 import state.State;
 
 public abstract class Action {
 
-    public abstract void update(State state, MovingEntity entity);
+    public abstract void update(State state, Humanoid entity);
     public abstract boolean isDone();
     public abstract String getAnimationName();
 }

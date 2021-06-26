@@ -37,4 +37,10 @@ public class PlayerController implements EntityController {
 		return input.isCurrentlyPressed(KeyEvent.VK_A);
 	}
 
+	@Override
+	public boolean isRequestingAction() {
+		
+		return input.isPressed(KeyEvent.VK_SPACE);
+	}
+
 }

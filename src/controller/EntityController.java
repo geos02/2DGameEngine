@@ -6,4 +6,5 @@ public interface EntityController {
 	boolean isRequestingDown();
 	boolean isRequestingRight();
 	boolean isRequestingLeft();
+	boolean isRequestingAction();
 }

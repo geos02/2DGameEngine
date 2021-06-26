@@ -11,32 +11,33 @@ import java.util.Map;
 public class SpriteLibrary {
 
 	
-	public static Map<String,SpriteSet> units; // dave & matt
-	public static Map<String, Image> tiles;
+	public static Map<String,SpriteSet> spriteSets; // dave & matt
+	public static Map<String, Image> images;
 
 	public SpriteLibrary() {
-		units = new HashMap<>();
-		tiles = new HashMap<>();
+		spriteSets = new HashMap<>();
+		images = new HashMap<>();
 		loadSpritesFromDisk();
 	}
 
 	private void loadSpritesFromDisk() {
-		loadUnits("res/sprites/units");
-		loadTiles("res/sprites/tiles");
+		loadSpriteSets("res/sprites/units");
+		loadImages("res/sprites/tiles");
+		loadImages("res/sprites/effects");
 	}
 	
-	private void loadTiles(String path) {
+	private void loadImages(String path) {
 		
 		String[] imagesInFolder = getImagesInFolder(path);
 		
 		for(String fileName : imagesInFolder) {
 			
-			tiles.put(fileName.substring(0,fileName.length() - 4),
+			images.put(fileName.substring(0,fileName.length() - 4),
 					  ImageUtils.loadImage(path.substring(3) + "/" + fileName));
 		}
 	}
 	
-	private void loadUnits(String path) {
+	private void loadSpriteSets(String path) {
 		String[] folderNames = getFolderNames(path);
 		for(String folderName : folderNames) {
 			
@@ -50,7 +51,7 @@ public class SpriteLibrary {
 								   ImageUtils.loadImage(pathToFolder.substring(3) + "/" + sheetName));
 			}
 			
-			units.put(folderName, spriteSet);
+			spriteSets.put(folderName, spriteSet);
 		}
 	}
 	
@@ -65,11 +66,11 @@ public class SpriteLibrary {
 		return file.list((current,name) -> new File(current, name).isFile() );
 	}
 
-	public SpriteSet getUnit(String name) {
-		return units.get(name);
+	public SpriteSet getSpriteSet(String name) {
+		return spriteSets.get(name);
 	}
 	
-	public Image getTile(String name) {
-		return tiles.get(name);
+	public Image getImage(String name) {
+		return images.get(name);
 	}
 }

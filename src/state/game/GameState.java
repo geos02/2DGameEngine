@@ -11,9 +11,10 @@ import core.Size;
 import entity.NPC;
 import entity.Player;
 import entity.SelectionCircle;
-import entity.action.Cough;
-import entity.effect.Sick;
+import entity.humanoid.action.Cough;
+import entity.humanoid.effect.Sick;
 import game.Game;
+import game.settings.GameSettings;
 import input.Input;
 import map.GameMap;
 import state.State;
@@ -24,12 +25,12 @@ import ui.clickable.UIButton;
 
 public class GameState extends State {
 
-	public GameState(Size windowSize, Input input) {
-		super(windowSize, input);
+	public GameState(Size windowSize, Input input, GameSettings settings) {
+		super(windowSize, input, settings);
 		gameMap = new GameMap(new Size(20, 20), spriteLibrary);
 
 		initializeCharacters();
-		initializeNPC(100);
+		initializeNPC(80);
 		makeNumberOfNPCsSick(10);
 		initializeUI(windowSize);
 	}
@@ -47,6 +48,7 @@ public class GameState extends State {
 		/*VerticalContainer verticalContainer = new VerticalContainer(windowSize);
 		verticalContainer.setAlignment(new Alignment(Alignment.Position.CENTER,Alignment.Position.CENTER));
 		verticalContainer.setBackgroundColor(Color.DARK_GRAY);
+		verticalContainer.setPadding(new Spacing(10));
 		verticalContainer.addUIComponent(new UIButton("Menu", (state) -> System.out.println("Button1 pressed")));
 		verticalContainer.addUIComponent(new UIButton("Options", (state) -> System.out.println("Button2 pressed")));
 		verticalContainer.addUIComponent(new UIButton("Exit", (state) -> System.exit(0)));
