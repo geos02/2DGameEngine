@@ -1,17 +1,18 @@
 package state.game;
 
-import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
-
 
 import controller.NPCController;
 import controller.PlayerController;
 import core.Position;
 import core.Size;
+import core.Condition;
 import entity.NPC;
 import entity.Player;
 import entity.SelectionCircle;
-import entity.humanoid.action.Cough;
+import entity.humanoid.Humanoid;
+import entity.humanoid.effect.Isolated;
 import entity.humanoid.effect.Sick;
 import game.Game;
 import game.settings.GameSettings;
@@ -21,18 +22,52 @@ import state.State;
 import state.game.ui.UIGameTime;
 import state.game.ui.UISicknessStatistics;
 import ui.*;
-import ui.clickable.UIButton;
 
 public class GameState extends State {
 
+	private List<Condition> victoryConditions;
+	private List<Condition> defeatConditions;
+	private boolean playing;
+	
 	public GameState(Size windowSize, Input input, GameSettings settings) {
 		super(windowSize, input, settings);
 		gameMap = new GameMap(new Size(20, 20), spriteLibrary);
-
+		playing  = true;
+		
 		initializeCharacters();
 		initializeNPC(80);
-		makeNumberOfNPCsSick(10);
+		makeNumberOfNPCsSick(1);
 		initializeUI(windowSize);
+		initializeConditions();
+	}
+
+	private void initializeConditions() {
+		
+		victoryConditions = new ArrayList<>();
+		
+		Condition winCondition = () -> getNumberOfSick() == 0;
+		victoryConditions.add(winCondition);
+	}
+	
+	@Override
+	public void update(Game game) {
+		
+		super.update(game);
+		
+		if(playing) {
+			if(victoryConditions.stream().allMatch(Condition::isMet)) {
+				win();
+			}
+		}
+	}
+	
+	private void win() {
+		playing = false;
+		
+		VerticalContainer container = new VerticalContainer(camera.getSize());
+		container.setAlignment(new Alignment(Alignment.Position.CENTER, Alignment.Position.CENTER));
+		container.addUIComponent(new UIText("VICTORY!!"));
+		uiContainers.add(container);
 	}
 
 	private void initializeUI(Size windowSize) {
@@ -84,5 +119,23 @@ public class GameState extends State {
 			gameObjects.add(npc);
 		}
 
+	}
+	
+	public long getNumberOfSick() {
+		return getGameObjectsOfClass(Humanoid.class).stream()
+				.filter(humanoid -> humanoid.isAffectedBy(Sick.class) && !humanoid.isAffectedBy(Isolated.class))
+				.count();
+	}
+	
+	public long getNumberOfHealthy() {
+		return getGameObjectsOfClass(Humanoid.class).stream()
+				.filter(humanoid -> !humanoid.isAffectedBy(Sick.class))
+				.count();
+	}
+	
+	public long getNumberOfIsolated() {
+		return getGameObjectsOfClass(Humanoid.class).stream()
+				.filter(humanoid -> humanoid.isAffectedBy(Sick.class) && humanoid.isAffectedBy(Isolated.class))
+				.count();
 	}
 }

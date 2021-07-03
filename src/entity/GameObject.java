@@ -62,6 +62,10 @@ public abstract class GameObject {
 				getPosition().getY() - camera.getPosition().getY() - renderOffset.getY());
 	}
 	
+	public void setRenderOrder(int renderOrder) {
+		this.renderOrder = renderOrder;
+	}
+	
 	public int getRenderOrder() {
 		return renderOrder;
 	}

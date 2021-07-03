@@ -55,4 +55,8 @@ public class Motion {
 		direction.normalize();
 		return direction;
 	}
+
+	public void add(Vector2D other) {
+		this.vector2D.add(other);
+	}
 }

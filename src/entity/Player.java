@@ -7,6 +7,7 @@ import controller.EntityController;
 import core.Position;
 import entity.humanoid.Humanoid;
 import entity.humanoid.action.BlowBubble;
+import entity.humanoid.effect.Isolated;
 import game.Game;
 import gfx.SpriteLibrary;
 import state.State;
@@ -64,6 +65,7 @@ public class Player extends Humanoid {
 		return state.getGameObjectsOfClass(NPC.class).stream()
 				.filter(npc -> getPosition().distanceTo(npc.getPosition()) < targetRange)
 				.filter(npc -> isFacing(npc.getPosition()))
+				.filter(npc -> !npc.isAffectedBy(Isolated.class))
 				.min(Comparator.comparingDouble(npc -> position.distanceTo(npc.getPosition())));
 	}
 

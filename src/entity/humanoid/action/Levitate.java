@@ -3,7 +3,11 @@ package entity.humanoid.action;
 import entity.humanoid.Humanoid;
 import state.State;
 
-public class Leviate extends Action {
+public class Levitate extends Action {
+	
+	public Levitate() {
+		interruptable = false;
+	}
 
 	@Override
 	public void update(State state, Humanoid entity) {

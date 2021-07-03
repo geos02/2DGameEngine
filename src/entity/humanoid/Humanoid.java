@@ -72,6 +72,10 @@ public class Humanoid extends MovingEntity {
     }
 	 
 	 public void perform(Action action) {
+		// Evita que se ejecute una accion si esta no es interrumplible
+		if(this.action.isPresent() && !this.action.get().isInterruptable())
+			return;
+		
         this.action = Optional.of(action);
     }
 
@@ -91,6 +95,11 @@ public class Humanoid extends MovingEntity {
 	@Override
 	protected void handleCollisions(GameObject gameObject) {
 		
+	}
+
+	public List<Effect> getEffects() {
+		
+		return effects;
 	}
 
 }
